@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import mlflow
 import mlflow.sklearn
+from mlflow.models.signature import infer_signature
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
@@ -11,9 +12,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 import sys, pathlib
+
 ROOT_DIR = '../'
 SRC_DIR = ROOT_DIR
-
 sys.path.append(str(SRC_DIR))
 
 RANDOM_STATE = 42
@@ -38,18 +39,21 @@ def preprocess_features(X):
 
     return preprocessor
 
+
 def evaluate_model(model, X_test, y_test):
     y_pred = model.predict(X_test)
     y_proba = model.predict_proba(X_test)[:, 1] if hasattr(model, "predict_proba") else y_pred
+
     return {
-        "accuracy": accuracy_score(y_test, y_pred),
-        "f1_score": f1_score(y_test, y_pred),
-        "roc_auc": roc_auc_score(y_test, y_proba),
-        "report": classification_report(y_test, y_pred)
+        "accuracy": float(accuracy_score(y_test, y_pred)),
+        "f1_score": float(f1_score(y_test, y_pred)),
+        "roc_auc": float(roc_auc_score(y_test, y_proba)),
+        "report": classification_report(y_test, y_pred, digits=4)
     }
 
+
 def train_and_log_model(name, model, X_train, X_test, y_train, y_test, preprocessor):
-    with mlflow.start_run(run_name=name):
+    with mlflow.start_run(run_name=name) as run:
         pipeline = Pipeline(steps=[
             ("preprocessing", preprocessor),
             ("classifier", model)
@@ -59,11 +63,36 @@ def train_and_log_model(name, model, X_train, X_test, y_train, y_test, preproces
 
         mlflow.log_param("model", name)
         mlflow.log_metrics({k: round(v, 4) for k, v in metrics.items() if k != "report"})
-        mlflow.sklearn.log_model(pipeline, name="credit-risk-model")
+
+        input_example = X_train.head(3)
+        signature = infer_signature(X_train, pipeline.predict(X_train))
+
+        mlflow.sklearn.log_model(
+            pipeline,
+            name="credit-risk-model",
+            signature=signature,
+            input_example=input_example
+        )
+
+        # Workaround for YAML serialization bug
+        client = mlflow.tracking.MlflowClient()
+        run_id = run.info.run_id
+        tags = client.get_run(run_id).data.tags
+        if "mlflow.log-model.history" in tags:
+            client.delete_tag(run_id, "mlflow.log-model.history")
+
+        # Register the best model
+        if name == "RandomForest":
+            result = mlflow.register_model(
+                model_uri=f"runs:/{run_id}/credit-risk-model",
+                name="credit-risk-rf-best"
+            )
+            print(f"✅ Registered {name} model as credit-risk-rf-best")
 
         print(f"\n{name} Evaluation:")
         print(metrics["report"])
         return name, metrics["roc_auc"]
+    
 
 def main():
     mlflow.set_experiment("credit-risk-model")
@@ -90,5 +119,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
