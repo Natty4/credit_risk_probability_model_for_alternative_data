@@ -20,7 +20,7 @@ def home():
 @app.post("/predict", response_model=RiskPrediction)
 def predict_risk(customer: CustomerFeatures):
     # Convert input to DataFrame
-    input_df = pd.DataFrame([customer.dict()])
+    input_df = pd.DataFrame([customer.model_dump()])
 
     # Predict risk
     risk_proba = model.predict_proba(input_df)[0][1]
