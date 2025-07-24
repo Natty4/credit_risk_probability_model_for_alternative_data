@@ -1,2 +1,5 @@
-# Add your project dependencies here
-
+python-dotenv
+# fastapi
+# uvicorn
+pydantic
+pytest
