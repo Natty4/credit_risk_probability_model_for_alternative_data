@@ -13,7 +13,7 @@ __pycache__/
 build/
 
 mlruns/
-
+mlruns/*
 develop-eggs/
 
 dist/
