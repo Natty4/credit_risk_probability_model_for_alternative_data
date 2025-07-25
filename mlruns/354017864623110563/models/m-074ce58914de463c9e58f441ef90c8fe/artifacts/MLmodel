@@ -1,0 +1,39 @@
+artifact_path: file:///C:/Users/hp/Documents/Learning/Remote/10Academy/W5/mlruns/354017864623110563/models/m-074ce58914de463c9e58f441ef90c8fe/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.10.13
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.1
+is_signature_from_type_hint: false
+mlflow_version: 3.1.4
+model_id: m-074ce58914de463c9e58f441ef90c8fe
+model_size_bytes: 133540
+model_uuid: m-074ce58914de463c9e58f441ef90c8fe
+prompts: null
+run_id: 8ef870f7bea0413082437019611b6781
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "double", "name": "Total_Amount", "required": true}, {"type":
+    "double", "name": "Avg_Amount", "required": true}, {"type": "double", "name":
+    "Std_Amount", "required": true}, {"type": "double", "name": "Max_Amount", "required":
+    true}, {"type": "double", "name": "Min_Amount", "required": true}, {"type": "double",
+    "name": "Avg_Pos_Amount", "required": true}, {"type": "double", "name": "Total_Refunds",
+    "required": true}, {"type": "double", "name": "Transaction_Count", "required":
+    true}, {"type": "long", "name": "Recency", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-07-24 23:08:34.795992'

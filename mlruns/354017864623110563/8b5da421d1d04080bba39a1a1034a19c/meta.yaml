@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/hp/Documents/Learning/Remote/10Academy/W5/mlruns/354017864623110563/8b5da421d1d04080bba39a1a1034a19c/artifacts
+end_time: 1753398510169
+entry_point_name: ''
+experiment_id: '354017864623110563'
+lifecycle_stage: active
+run_id: 8b5da421d1d04080bba39a1a1034a19c
+run_name: LogisticRegression
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753398504558
+status: 3
+tags: []
+user_id: hp
