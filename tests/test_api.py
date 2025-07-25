@@ -1,14 +1,16 @@
-from fastapi.testclient import TestClient
+from unittest.mock import patch, MagicMock
 from api.main import app
-from unittest.mock import patch
+from fastapi.testclient import TestClient
 import numpy as np
 
 client = TestClient(app)
 
-@patch("api.main.model.predict_proba")
-def test_predict(mock_predict):
-    # Simulate output of a real binary classifier (low risk vs high risk)
-    mock_predict.return_value = np.array([[0.08, 0.85]])
+@patch("api.main.get_model")
+def test_predict(mock_get_model):
+    mock_model = MagicMock()
+    # Return [prob_low_risk, prob_high_risk]
+    mock_model.predict_proba.return_value = np.array([[0.15, 0.85]])
+    mock_get_model.return_value = mock_model
 
     response = client.post("/predict", json={
         "Total_Amount": 500.0,
@@ -23,7 +25,5 @@ def test_predict(mock_predict):
     })
 
     assert response.status_code == 200
-    data = response.json()
-    assert "risk_probability" in data
-    assert "risk_label" in data
-    assert data["risk_label"] == "high_risk"
+    assert response.json()["risk_label"] == "high_risk"
+    assert 0.8 < response.json()["risk_probability"] < 0.9
