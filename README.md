@@ -4,7 +4,7 @@
 
 ---
 
-## 🧠 Overview
+## Overview
 
 This project builds an end-to-end credit risk scoring system using **alternative behavioral data**. It leverages Recency-Frequency-Monetary (RFM) features from transaction logs and uses machine learning to predict whether a customer is **high risk** or **low risk**.
 
@@ -17,7 +17,7 @@ The system supports:
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```plaintext
 ├── api/                    # FastAPI app
@@ -42,7 +42,7 @@ The system supports:
 
 ---
 
-## 🔁 Data Pipeline
+## Data Pipeline
 
 * **Source**: Transaction logs (`transactions.csv`)
 * **Engineered Features**:
@@ -56,7 +56,7 @@ The system supports:
 
 ---
 
-## 🤖 Model Training
+## Model Training
 
 Three models are trained and evaluated using `MLflow`:
 
@@ -68,11 +68,11 @@ Three models are trained and evaluated using `MLflow`:
 
 * Accuracy, F1 Score, ROC-AUC
 
-✅ Best model: **Random Forest** with **ROC-AUC = 1.000**
+✅ Best model: **Random Forest** with **ROC-AUC = 0.999**
 
 ---
 
-## 🔮 API: Credit Risk Prediction
+## API: Credit Risk Prediction
 
 After training, the best model is served using **FastAPI**:
 
@@ -124,7 +124,7 @@ Includes:
 
 ---
 
-## 🔁 CI/CD with GitHub Actions
+## ♻️ CI/CD with GitHub Actions
 
 Every push to `main` triggers:
 
@@ -144,20 +144,6 @@ Defined in `.github/workflows/ci.yml`
 * 🧠 Use real loan default data for supervised learning
 
 ---
-
-## 💡 Credits
-
-Inspired by alternative data applications in fintech and micro-lending in emerging markets.
-Big thanks 10 academy 💙
-
----
-
-
-
-
-# Credit Risk Probability Model for Alternative Data
----
-
 
 
 ## 📊 Credit Scoring Business Understanding
@@ -183,3 +169,9 @@ However, proxy-based labeling introduces uncertainty. It assumes that behavioral
 There is a trade-off between transparency and predictive performance. Simple models like Logistic Regression with WoE are easy to interpret and justify in regulatory and legal settings. Complex models like Gradient Boosting Machines (GBMs) may achieve higher accuracy but are harder to explain.
 
 In regulated contexts, financial institutions often favor simpler, interpretable models to maintain compliance and public trust. Where advanced models are used, they must be supplemented with post-hoc explainability tools like SHAP to support transparency.
+
+---
+## Credits
+
+Inspired by alternative data applications in fintech and micro-lending in emerging markets.
+Big thanks 10academy 💙
